@@ -57,3 +57,11 @@ class Orc(Race):
 
 # human = Human()
 # print(human.__dict__)
+# stats_base = {
+#     "strength": 4,
+#     "intelligence": 4,
+#     "faith": 4
+# }
+# human = Human()
+# print(human.__dict__)
+# print(human.modify_statistics(stats_base.copy()))

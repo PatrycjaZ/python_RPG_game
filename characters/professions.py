@@ -1,4 +1,5 @@
 from utils import dice_roll, expected_dice_roll
+from races import Human, Elf, Orc
 
 
 """
@@ -197,9 +198,10 @@ class Priest(Character):
             self.mana = max([0, self.mana-(heal_amount / 10)])
 
 
-priest = Priest("Godfryd", "Human")
+# if __name__ == "__main__":
+#     warrior = Warrior("Godfryd", Human())
+#     print(warrior.__dict__)
 # # print(warrior.hp, priest.mana)  # 8.0, 5.0
 # print(priest.faith / 5)  # 1.4
 # priest.heal_ally(warrior)
 # print(warrior.hp, priest.mana)  # 9.4, 5.0 - 0.14 = 4.86
-print(priest.__dict__)
