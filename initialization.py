@@ -4,30 +4,14 @@ from fictional_names import name_generator
 from adventure import Task
 
 
-"""Zadanie 8)
-W pliku initialization.py napisz funkcje initialize_team() oraz initialize_tasks().
-
-Powinny one tworzyć listę postaci oraz listę zadań na podstawie informacji wejściowych utworzonych w poprzednim zadaniu. 
-Do nadania postaciom imion wykorzystaj bibliotekę fictional_names. Rasa powinna być losowa.
-
-Zadania wczytaj z pliku tasks_db.json a następnie wybierz losową próbkę tylu zadań ile wynika 
-z wcześniej utworzonej zmiennej. Na podstawie listy słowników utwórz listę instancji klasy Task i zwróć ją.
-
-Wywołaj obie funkcje w main.py i przechwyć ich output.
-"""
-
-
 def initialize_team(team_composition, available_races):
     team = []
     for profession_class, n_members in team_composition.items():
-        # np. profession = Warrior
-        # n_members = 2
         for _ in range(n_members):
-            # ...
             name = name_generator.generate_name(style="tolkien", library=True)
-            race_class = random.choice(available_races)  # to jest obiekt klasy
+            race_class = random.choice(available_races)
             race_object = race_class()
-            team_member = profession_class(name, race_object)  # instacja wojownika
+            team_member = profession_class(name, race_object)
             team.append(team_member)
     return team
 
