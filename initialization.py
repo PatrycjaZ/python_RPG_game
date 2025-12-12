@@ -33,6 +33,4 @@ def initialize_tasks(n_tasks):
         tasks_json = json.load(f)
 
     tasks = random.sample(tasks_json, n_tasks)
-    # return [Task(task["name"], task["task_type"], task["difficulty"], task["success_damage"], task["fail_damage"])
-    #         for task in tasks]
     return [Task(**task) for task in tasks]

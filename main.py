@@ -1,6 +1,7 @@
 from characters.professions import Warrior, Wizard, Priest
 from characters.races import Human, Elf, Orc
 from initialization import initialize_team, initialize_tasks
+from adventure import Adventure
 
 """
 Zadanie 7)
@@ -29,5 +30,5 @@ team = initialize_team(team_composition, available_races)
 
 tasks = initialize_tasks(n_tasks)
 
-print(team)
-print(tasks)
+# adventure = Adventure(team, tasks)
+# adventure.run()
