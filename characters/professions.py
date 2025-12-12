@@ -45,18 +45,18 @@ class Character:
     def __repr__(self):  # print([character])
         return f"{self.name} - {self.race} {self.__class__.__name__}"
 
-    def take_damage(self, amount):
-        self.hp = max(0, self.hp - max(amount, 0))
-
-    def heal(self, amount):
-        self.hp = min(self.hp + amount, self.max_hp)
-
     def _apply_race(self):
         stats_modified = self.race.modify_statistics(self.__dict__)
 
         self.strength = stats_modified["strength"]
         self.intelligence = stats_modified["intelligence"]
         self.faith = stats_modified["faith"]
+
+    def take_damage(self, amount):
+        self.hp = max(0, self.hp - max(amount, 0))
+
+    def heal(self, amount):
+        self.hp = min(self.hp + amount, self.max_hp)
 
     def to_json(self):
         return self.__dict__
