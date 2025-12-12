@@ -19,11 +19,15 @@ Wywołaj obie funkcje w main.py i przechwyć ich output.
 
 def initialize_team(team_composition, available_races):
     team = []
-    for profession, n_members in team_composition.items():
+    for profession_class, n_members in team_composition.items():
+        # np. profession = Warrior
+        # n_members = 2
         for _ in range(n_members):
+            # ...
             name = name_generator.generate_name(style="tolkien", library=True)
-            race = random.choice(available_races)()
-            team_member = profession(name, race)
+            race_class = random.choice(available_races)  # to jest obiekt klasy
+            race_object = race_class()
+            team_member = profession_class(name, race_object)  # instacja wojownika
             team.append(team_member)
     return team
 
