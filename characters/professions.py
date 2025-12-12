@@ -1,13 +1,4 @@
-import random
-
-
-expected_dice_roll = 3.5
-
-
-def dice_roll(k=6):
-    result = random.randint(1, k)
-    print("result:", result)
-    return result
+from utils import dice_roll, expected_dice_roll
 
 
 """
@@ -129,18 +120,19 @@ class Wizard(Character):
         self.mana = 5
 
     def expected_contribution(self, task_type):
-        if task_type == "magic":
-            return self.mana // 2 + self.intelligence + expected_dice_roll
-        else:
-            return expected_dice_roll + 2
+        return (self.mana // 2 + self.intelligence + expected_dice_roll
+                if task_type == "magic" else expected_dice_roll + 2)
 
     def contribute(self, task_type):
         if task_type == "magic":
             contribution = self.mana // 2 + self.intelligence + dice_roll()
-            return contribution
+            self.__spend_mana()
         else:
-            contribution = dice_roll() + 2
-            return contribution
+            contribution = 2 + dice_roll()
+        return contribution
+
+    def __spend_mana(self):
+        self.mana = max(0, self.mana-1)
 
 
 # wizard = Wizard("Godryf", "Human")
@@ -174,22 +166,26 @@ class Priest(Character):
         self.intelligence += 1
         self.faith += 3
 
-        self.mana = 5
+        self.mana = 5.0
 
     def expected_contribution(self, task_type):
-        if task_type in ["holy", "support"]:
-            return self.faith + expected_dice_roll
-        else:
-            return expected_dice_roll + 1
+        return (self.faith + expected_dice_roll
+                if task_type in ("holy", "support") else expected_dice_roll + 1)
 
     def contribute(self, task_type):
-        if task_type in ["holy", "support"]:
-            contribution = self.faith + dice_roll()
-            return contribution
-        else:
-            contribution = dice_roll() + 1
-            return contribution
+        return (self.faith + dice_roll()
+                if task_type in ("holy", "support") else dice_roll() + 1)
 
-    def heal_ally(self, ally):
+    def heal_ally(self, team_member):
         if self.mana > 0:
             heal_amount = self.faith / 5
+            team_member.heal(heal_amount)
+            self.mana = max([0, self.mana-(heal_amount / 10)])
+
+
+priest = Priest("Godfryd", "Human")
+warrior = Warrior("Zygfryd", "Elf")
+print(warrior.hp, priest.mana)  # 8.0, 5.0
+print(priest.faith / 5)  # 1.4
+priest.heal_ally(warrior)
+print(warrior.hp, priest.mana)  # 9.4, 5.0 - 0.14 = 4.86
