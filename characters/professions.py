@@ -19,6 +19,11 @@ W pliku professions.py stwórz klasę Character. Powinna ona posiadać:
 Na koniec stwórz kilka instancji tej klasy i przetestuj wszystkie funkcjonalności.
 """
 
+"""
+Zadanie 5)
+Wróć do klasy Character i utwórz metodę _apply_race(), która zaaplikuje do postaci modyfikatory wynikające z rasy.
+"""
+
 
 class Character:
     max_hp = 10.0
@@ -30,6 +35,8 @@ class Character:
         self.strength = 4
         self.intelligence = 4
         self.faith = 4
+
+        self._apply_race()
 
     def __str__(self):  # print(character)
         return self.name
@@ -43,6 +50,13 @@ class Character:
     def heal(self, amount):
         self.hp = min(self.hp + amount, self.max_hp)
 
+    def _apply_race(self):
+        stats_modified = self.race.modify_statistics(self.__dict__)
+
+        self.strength = stats_modified["strength"]
+        self.intelligence = stats_modified["intelligence"]
+        self.faith = stats_modified["faith"]
+
     def to_json(self):
         return self.__dict__
 
@@ -52,7 +66,7 @@ class Character:
 
 
 # character = Character("Godfryd", "Human")
-# # print(character.to_json())
+# print(character.to_json())
 # print("Is character alive?", character.is_alive)
 # print(character)
 # print([character])
@@ -184,8 +198,8 @@ class Priest(Character):
 
 
 priest = Priest("Godfryd", "Human")
-warrior = Warrior("Zygfryd", "Elf")
-print(warrior.hp, priest.mana)  # 8.0, 5.0
-print(priest.faith / 5)  # 1.4
-priest.heal_ally(warrior)
-print(warrior.hp, priest.mana)  # 9.4, 5.0 - 0.14 = 4.86
+# # print(warrior.hp, priest.mana)  # 8.0, 5.0
+# print(priest.faith / 5)  # 1.4
+# priest.heal_ally(warrior)
+# print(warrior.hp, priest.mana)  # 9.4, 5.0 - 0.14 = 4.86
+print(priest.__dict__)
