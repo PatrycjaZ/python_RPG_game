@@ -1,4 +1,17 @@
+import random
+
+
+expected_dice_roll = 3.5
+
+
+def dice_roll(k=6):
+    result = random.randint(1, k)
+    print("result:", result)
+    return result
+
+
 """
+ZADANIE 1)
 W pliku professions.py stwórz klasę Character. Powinna ona posiadać:
 
 - atrybut klasy max_hp równy 10.0
@@ -56,3 +69,127 @@ class Character:
 # print("Character took damage, hp now is:", character.hp)
 # character.heal(2)
 # print("Character was healed, hp now is:", character.hp)
+
+"""
+ZADANIE 2)
+Stwórz następujące klasy:
+
+Warrior
+- niech dziedziczy po Character
+- powinien mieć bonus +2 do siły i -1 do inteligencji
+- napisz metodę expected_contribution(), która na podstawie typu zadania obliczy oczekiwany wkład w zadanie. 
+    Dla tasków typu combat powinna to być wartość siły + oczekiwany rzut kością,
+    a dla innych typów 2 + oczekiwany rzut kością
+- napisz metodę contribute(), która wyznaczy faktyczny wkład w wykonanie zadania uwzględniając rzut kością
+"""
+
+
+class Warrior(Character):
+    def __init__(self, name, race):
+        super().__init__(name, race)
+
+        self.strength += 2
+        self.intelligence -= 1
+
+    def expected_contribution(self, task_type):
+        return (self.strength + expected_dice_roll
+                if task_type == "combat" else 2 + expected_dice_roll)
+
+    def contribute(self, task_type):
+        contribution = (self.strength + dice_roll()
+                        if task_type == "combat" else 2 + dice_roll())
+        return contribution
+
+
+# warrior = Warrior("Godryf", "Human")
+# print(warrior.__dict__)
+# print(warrior.expected_contribution('combat'))
+# print(warrior.contribute('combat'))
+
+"""
+Wizard
+- niech dziedziczy po Character
+- powinien mieć bonus -1 do siły, +2 do inteligencji i +1 do wiary a także atrybut mana równy 5
+- napisz metodę expected_contribution(), która na podstawie typu zadania obliczy oczekiwany wkład w zadanie. 
+    Dla tasków typu magic powinien być obliczany ze wzoru mana // 2 + intelligence + expected_dice_roll,
+    a dla innych typów niech będzie równy 2 + rzut kością
+- napisz metodę contribute(), która wyznaczy faktyczny wkład w wykonanie zadania uwzględniając rzut kością
+- napisz metodę __spend_mana(), która odejmie 1 od many czarodzieja. Wywołaj ją w metodzie contribute()
+"""
+
+
+class Wizard(Character):
+    def __init__(self, name, race):
+        super().__init__(name, race)
+
+        self.strength -= 1
+        self.intelligence += 2
+        self.faith += 1
+
+        self.mana = 5
+
+    def expected_contribution(self, task_type):
+        if task_type == "magic":
+            return self.mana // 2 + self.intelligence + expected_dice_roll
+        else:
+            return expected_dice_roll + 2
+
+    def contribute(self, task_type):
+        if task_type == "magic":
+            contribution = self.mana // 2 + self.intelligence + dice_roll()
+            return contribution
+        else:
+            contribution = dice_roll() + 2
+            return contribution
+
+
+# wizard = Wizard("Godryf", "Human")
+# print(wizard.__dict__)
+# print(wizard.expected_contribution('magic'))
+# print(wizard.contribute('magic'))
+
+"""
+Priest
+- niech dziedziczy po Character
+- powinien mieć bonus -2 do siły, +1 do inteligencji i +3 do wiary a także atrybut mana równy 5.0
+- napisz metodę expected_contribution(), która na podstawie typu zadania obliczy oczekiwany wkład w zadanie. 
+    Dla tasków typu holy oraz support powinna to być wartość wiary + oczekiwany rzut kością,
+    a dla innych typów 1 + oczekiwany rzut kością
+- napisz metodę contribute(), która wyznaczy faktyczny wkład w wykonanie zadania uwzględniając rzut kością
+- napisz metodę heal_ally(), która przyjmie jako argument sojusznika należącego do drużyny 
+    i jeżeli kapłan ma dodatnią ilość many to 
+    (1) wyznaczy heal_amount równe faith / 5 
+    (2) uleczy sojusznika tą ilością punktów życia i 
+    (3) pomniejszy manę o 10% z heal_amount
+
+Na koniec stwórz instancje tych klas i przetestuj wszystkie funkcjonalności.
+"""
+
+
+class Priest(Character):
+    def __init__(self, name, race):
+        super().__init__(name, race)
+
+        self.strength -= 2
+        self.intelligence += 1
+        self.faith += 3
+
+        self.mana = 5
+
+    def expected_contribution(self, task_type):
+        if task_type in ["holy", "support"]:
+            return self.faith + expected_dice_roll
+        else:
+            return expected_dice_roll + 1
+
+    def contribute(self, task_type):
+        if task_type in ["holy", "support"]:
+            contribution = self.faith + dice_roll()
+            return contribution
+        else:
+            contribution = dice_roll() + 1
+            return contribution
+
+    def heal_ally(self, ally):
+        if self.mana > 0:
+            heal_amount = self.faith / 5
