@@ -1,6 +1,4 @@
 from utils import dice_roll, expected_dice_roll
-from races import Human, Elf, Orc
-
 
 """
 ZADANIE 1)
